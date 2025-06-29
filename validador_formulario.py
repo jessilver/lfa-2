@@ -29,12 +29,12 @@ def validar_email(email):
     - Usuário: mínimo 2 símbolos alfanuméricos, ponto ou underline
     - Seguido de '@'.
     - Domínio: mesma regra do usuário, mínimo 2 símbolos
-    - TLD: ponto seguido de 3 letras minúsculas
+    - TLD: ponto seguido de 3 letras minúsculas (obrigatório, exatamente 3)
     """
     padrao = re.compile(
         r"^[\w._]{2,}@"         # Usuário: mínimo 2 símbolos alfanuméricos, ponto ou underline
-        r"[\w._]{2,}"           # Domínio: mesma regra do usuário, mínimo 2 símbolos
-        r"\.[a-z]{3}$"          # TLD: ponto seguido de 3 letras minúsculas
+        r"[\w._-]{2,}"          # Domínio: mesma regra do usuário, mínimo 2 símbolos
+        r"\.[a-z]{3}$"          # TLD: ponto seguido de 3 letras minúsculas (obrigatório)
     )
     return bool(padrao.match(email))
 
@@ -53,11 +53,11 @@ def validar_telefone(telefone):
 def extrair_emails_validos(texto):
     """
     Extrai todos os e-mails válidos de um texto.
-    Utiliza a mesma expressão regular da função de validação de e-mail.
+    Utiliza a função de validação de e-mail para filtrar apenas os válidos.
     """
-    # Regex ajustada para não capturar e-mails com '..' ou que terminem com '.' antes do TLD.
-    padrao_email = re.compile(r"[\w_]+(?:\.[\w_]+)*@[\w-]+(?:\.[\w-]+)*\.[a-z]{3}")
-    return padrao_email.findall(texto)
+    candidatos = re.findall(r"[\w._-]+@[\w.-]+\.[a-z]{3,}", texto)
+    # Filtra usando a função validar_email
+    return [email for email in candidatos if validar_email(email)]
 
 # --- Demonstração ---
 if __name__ == "__main__":
