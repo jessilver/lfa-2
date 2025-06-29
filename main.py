@@ -1,4 +1,3 @@
-import re
 from validador_formulario import validar_nome, validar_cpf, validar_email, validar_telefone, extrair_emails_validos
 
 def menu():
