@@ -23,21 +23,16 @@ def validar_cpf(cpf):
 def validar_email(email):
     """
     Valida o campo E-mail.
-    - Nome de usuário: mínimo 2 símbolos (alfanuméricos, ponto ou underline).
+    - Usuário: mínimo 2 símbolos alfanuméricos, ponto ou underline
     - Seguido de '@'.
-    - Domínio: mesma regra do nome de usuário.
-    - Seguido de '.' e 3 letras minúsculas para o TLD.
+    - Domínio: mesma regra do usuário, mínimo 2 símbolos
+    - TLD: ponto seguido de 3 letras minúsculas
     """
-    # 1. Nome de usuário: mínimo 2 símbolos (alfanuméricos, ponto ou underline), não pode começar com ponto, nem ter '..'
-    usuario_regex = r"(?!\.)(?!.*\.\.)(?!.*\.$)[\w\.]{2,}"
-    # 2. Arroba obrigatória
-    arroba = r"@"
-    # 3. Domínio: mínimo 2 símbolos (alfanuméricos, hífen ou ponto), não pode começar com '.' ou '-', nem ter '..' ou terminar com '.' ou '-'
-    dominio_regex = r"(?![.-])(?!.*\.\.)(?!.*[-.]$)[\w\.-]{2,}"
-    # 4. TLD: ponto seguido de 3 letras minúsculas
-    tld_regex = r"\.[a-z]{3}"
-    # 5. Junta tudo
-    padrao = re.compile(rf"^{usuario_regex}{arroba}{dominio_regex}{tld_regex}$")
+    padrao = re.compile(
+        r"^[\w._]{2,}@"         # Usuário: mínimo 2 símbolos alfanuméricos, ponto ou underline
+        r"[\w._]{2,}"           # Domínio: mesma regra do usuário, mínimo 2 símbolos
+        r"\.[a-z]{3}$"          # TLD: ponto seguido de 3 letras minúsculas
+    )
     if padrao.match(email):
         return True
     return False
