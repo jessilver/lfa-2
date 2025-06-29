@@ -3,22 +3,25 @@ import re
 def validar_nome(nome):
     """
     Valida o campo Nome.
-    O nome deve ter no máximo 50 símbolos alfabéticos e espaços.
+    - Apenas letras maiúsculas/minúsculas e espaço
+    - Entre 1 e 50 caracteres
     """
-    padrao = re.compile(r"^[a-zA-Z ]{1,50}$")
-    if padrao.match(nome):
-        return True
-    return False
+    padrao = re.compile(
+        r"^[a-zA-Z ]{1,50}$"  # Letras e espaço, de 1 a 50 caracteres
+    )
+    return bool(padrao.fullmatch(nome))
 
 def validar_cpf(cpf):
     """
     Valida o campo CPF.
-    O CPF pode conter somente 11 algarismos numéricos ou estar no formato "000.000.000-00".
+    - 11 dígitos numéricos OU
+    - Formato 000.000.000-00 (com pontos nas posições 3 e 7 e hífen na posição 11)
     """
-    padrao = re.compile(r"^(\d{11}|\d{3}\.\d{3}\.\d{3}-\d{2})$")
-    if padrao.match(cpf):
-        return True
-    return False
+    padrao = re.compile(
+        r"^(\d{11}"  # 11 dígitos numéricos
+        r"|\d{3}\.\d{3}\.\d{3}-\d{2})$"  # ou formato com pontos e hífen
+    )
+    return bool(padrao.fullmatch(cpf))
 
 def validar_email(email):
     """
@@ -33,19 +36,19 @@ def validar_email(email):
         r"[\w._]{2,}"           # Domínio: mesma regra do usuário, mínimo 2 símbolos
         r"\.[a-z]{3}$"          # TLD: ponto seguido de 3 letras minúsculas
     )
-    if padrao.match(email):
-        return True
-    return False
+    return bool(padrao.match(email))
 
 def validar_telefone(telefone):
     """
     Valida o campo Telefone.
-    Dois formatos possíveis: 11 números ou "(00)00000-0000".
+    - 11 dígitos numéricos OU
+    - Formato (00)00000-0000
     """
-    padrao = re.compile(r"^(\d{11}|\(\d{2}\)\d{5}-\d{4})$")
-    if padrao.match(telefone):
-        return True
-    return False
+    padrao = re.compile(
+        r"^(\d{11}"  # 11 dígitos numéricos
+        r"|\(\d{2}\)\d{5}-\d{4})$"  # ou formato (00)00000-0000
+    )
+    return bool(padrao.match(telefone))
 
 def extrair_emails_validos(texto):
     """
