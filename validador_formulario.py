@@ -27,14 +27,21 @@ def validar_email(email):
     """
     Valida o campo E-mail.
     - Usuário: mínimo 2 símbolos alfanuméricos, ponto ou underline
+    - Não pode começar ou terminar com ponto, nem ter '..'
     - Seguido de '@'.
-    - Domínio: mesma regra do usuário, mínimo 2 símbolos
+    - Domínio: mesma regra do usuário, mínimo 2 símbolos, não pode começar/terminar com ponto ou hífen, nem ter '..'
     - TLD: ponto seguido de 3 letras minúsculas (obrigatório, exatamente 3)
     """
     padrao = re.compile(
-        r"^[\w._]{2,}@"         # Usuário: mínimo 2 símbolos alfanuméricos, ponto ou underline
-        r"[\w._-]{2,}"          # Domínio: mesma regra do usuário, mínimo 2 símbolos
-        r"\.[a-z]{3}$"          # TLD: ponto seguido de 3 letras minúsculas (obrigatório)
+        r"^(?!\.)"              # Não pode começar com ponto
+        r"(?!.*\.\.)"          # Não pode ter dois pontos consecutivos
+        r"[\w._]{2,}"          # Usuário
+        r"(?<!\.)"             # Não pode terminar com ponto
+        r"@"
+        r"(?![.-])"             # Domínio não pode começar com ponto ou hífen
+        r"[\w._-]{2,}"         # Domínio
+        r"(?<![.-])"            # Domínio não pode terminar com ponto ou hífen
+        r"\.[a-z]{3}$"         # TLD
     )
     return bool(padrao.match(email))
 
@@ -55,8 +62,7 @@ def extrair_emails_validos(texto):
     Extrai todos os e-mails válidos de um texto.
     Utiliza a função de validação de e-mail para filtrar apenas os válidos.
     """
-    candidatos = re.findall(r"[\w._-]+@[\w.-]+\.[a-z]{3,}", texto)
-    # Filtra usando a função validar_email
+    candidatos = re.findall(r"[\w._-]+@[\w.-]+\.[a-z]{3}", texto)
     return [email for email in candidatos if validar_email(email)]
 
 # --- Demonstração ---
