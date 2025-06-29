@@ -3,11 +3,11 @@ import re
 def validar_nome(nome):
     """
     Valida o campo Nome.
-    - Apenas letras maiúsculas/minúsculas e espaço
+    - Aceita letras maiúsculas/minúsculas, acentuadas e espaço
     - Entre 1 e 50 caracteres
     """
     padrao = re.compile(
-        r"^[a-zA-Z ]{1,50}$"  # Letras e espaço, de 1 a 50 caracteres
+        r"^[A-Za-zÀ-ÖØ-öø-ÿ ]{1,50}$"  # Letras (com acento) e espaço, de 1 a 50 caracteres
     )
     return bool(padrao.fullmatch(nome))
 
